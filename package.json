@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/slugo/smash-dr/issues"
   },
-  "homepage": "https://github.com/slugo/smash-dr#readme"
+  "homepage": "https://github.com/slugo/smash-dr#readme",
+  "dependencies": {
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1"
+  }
 }
