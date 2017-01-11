@@ -43,5 +43,13 @@ function getBracketMatches(bracketId){
 
 const bracketsIds = getBrackets("fighting-fest-2016","wii-u-singles")
                     .then(res => Promise.all(res.map(id=>getBracketMatches(id))))
+                    .then(res => res.reduce((prev,curr)=>{
+                        const oldPlayers = prev.players.map(p=>p.name);
+                        const newPlayers = curr.players.filter(p=>oldPlayers.indexOf(p.name) === -1);
+                        return {
+                            players: prev.players.concat(newPlayers),
+                            matches: prev.matches.concat(curr.matches),
+                        }
+                    },{players:[],matches:[]}))
                     .then(res => console.log(res))
                     .catch(err => console.log(err));
