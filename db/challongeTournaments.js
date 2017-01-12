@@ -1,5 +1,8 @@
 const request = require('request-promise');
+const tournaments = require('./tournamentList.js').challongeTournaments;
 const BASE_URL = "http://api.challonge.com/v1/tournaments/";
+const env = require('dotenv').config();
+
 const options = {
     qs: {
         api_key: process.env.CHALLONGE_KEY,
@@ -44,16 +47,4 @@ function getTournament(tournamentId){
             .catch((err)=>console.log(err));
 }
 
-const tournaments = [
-    'doassingles',
-    'doassingles',
-    'Orangemaidcafe',
-    'fallensingles',
-    'mightysmash',
-    'spookyvillesingles',
-    'Androidsaga',
-    'hiroesingles',
-    'endofseasons',
-];
-
-const processedTournaments = Promise.all(tournaments.map((id)=>getTournament(id))).then((res)=>console.log(res));
+const processedTournaments = Promise.all(tournaments.map((id)=>getTournament(id)));
