@@ -4,7 +4,7 @@ const smashgg = require('./smashggParser.js');
 module.exports = ({smashggTournaments,challongeTournaments}) => {
     return new Promise((resolve,reject)=>{
         Promise.all([challonge(challongeTournaments),smashgg(smashggTournaments)])
-        .then(res=>console.log(res))
+        .then(res=>resolve(res.reduce((prev,curr)=>prev.concat(curr),[])))
         .catch(err=>console.log(err));
     })
 }
