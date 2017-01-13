@@ -1,7 +1,7 @@
 const request = require('request-promise');
-const tournaments = require('./tournamentList.js').challongeTournaments;
 const BASE_URL = "http://api.challonge.com/v1/tournaments/";
-const env = require('dotenv').config();
+
+require('dotenv').config();
 
 const options = {
     qs: {
@@ -47,4 +47,10 @@ function getTournament(tournamentId){
             .catch((err)=>console.log(err));
 }
 
-const processedTournaments = Promise.all(tournaments.map((id)=>getTournament(id)));
+module.exports = (tournamentList) => {
+    return new Promise((resolve,reject)=>{
+        Promise.all(tournamentList.map((id)=>getTournament(id)))
+            .then(res => resolve(res))
+            .catch(err => console.log(err));
+    })
+}

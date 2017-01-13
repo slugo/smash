@@ -1,5 +1,4 @@
 const request = require('request-promise');
-const tournaments = require('./tournamentList.js').smashggTournaments;
 const eventId = 'wii-u-singles';
 const players = {};
 const matches = [];
@@ -76,33 +75,13 @@ function getBracketMatches(bracketId){
         .catch(err => console.log(err));
 }
 
-const processedTournaments = Promise.all(tournaments.map(tournamentId=>getBrackets(tournamentId)))
+module.exports = (tournamentList) => {
+    return new Promise((resolve,reject)=>{
+        Promise.all(tournamentList.map(tournamentId=>getBrackets(tournamentId)))
                     .then(res => Promise.all(res.map(brackets=>Promise.all(brackets.map(bracketId=>getBracketMatches(bracketId))))))
                     .then(res => res.map(tournament=>reduceBrackets(tournament)))
-                    .then(res => Promise.all(tournaments.map((tournamentId,idx)=>formatTourneyInfo(tournamentId,res[idx]))))
-                    .then(res => console.log(res))
+                    .then(res => Promise.all(tournamentList.map((tournamentId,idx)=>formatTourneyInfo(tournamentId,res[idx]))))
+                    .then(res => resolve(res))
                     .catch(err => console.log(err));
-
-
-/*
-[
-    {
-        players:[ {} ]
-        matches:[ {} ] 
-    }
-]
-Tournament-> {
-    tourneyInfo:{
-        name,
-        date,
-        numberParticipants
-    },
-    players:{
-        [{}]
-    },
-    matches:{
-        [{}]
-    }
-}
-Reduce all objects to one containing all players that participated and their matches for that tourney
-*/
+    });
+};
