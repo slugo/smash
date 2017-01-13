@@ -4,7 +4,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const tournamentSchema = mongoose.Schema({
 	name: String,
     date: Date,
-    particinpants: Integer,
+    participants: Number,
     placings: [ObjectId]
 });
 
