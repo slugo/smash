@@ -4,7 +4,9 @@ const initialData = require('./seed.js');
 const tournamentParser = require('./parsers/tournamentParser.js');
 const tournamentList = require('./tournamentList.js');
 
-processedTournaments = tournamentParser(tournamentList).then(res=>console.log(res));
+processedTournaments = tournamentParser(tournamentList)
+						.then(res=>console.log(res.map(t=>t.tourneyInfo)))
+						.catch(err=>console.log(err));
 
 /*
 mongoose.connect(process.env.DATABASE_URL);

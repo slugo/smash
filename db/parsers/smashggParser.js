@@ -49,7 +49,8 @@ function formatTourneyInfo(tourneyId, info){
         .then(res => ({
             tourneyInfo:{
                 name: res.entities.tournament.name,
-                date: res.entities.tournament.startAt,
+                date: new Date(res.entities.tournament.startAt * 1000),
+                participants: info.players.length,
             },
             players: info.players,
             matches: info.matches,

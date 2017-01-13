@@ -31,7 +31,7 @@ function getTourneyInfo(tournament){
     let {name, started_at, participants_count} = tournament;
     return {
         name,
-        date: started_at.split('T')[0],
+        date: started_at,
         participants:participants_count
     }
 }
