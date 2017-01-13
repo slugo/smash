@@ -1,9 +1,12 @@
 const schemas = require('./models/index.js');
 const mongoose = require('mongoose');
 const initialData = require('./seed.js');
+const tournamentParser = require('./parsers/tournamentParser.js');
+const tournamentList = require('./tournamentList.js');
 
-require('dotenv').config();
+processedTournaments = tournamentParser(tournamentList).then(res=>console.log(res));
 
+/*
 mongoose.connect(process.env.DATABASE_URL);
 
 const db = mongoose.connection;
@@ -20,3 +23,4 @@ db.once('open', function(){
 		}
 	});
 });
+*/
