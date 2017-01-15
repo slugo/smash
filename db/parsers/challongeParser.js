@@ -16,7 +16,7 @@ const options = {
 function getPlayers(tournament){
     return tournament.participants.map(({participant})=>({
            id: participant.id,
-           player: participant.name,
+           name: participant.name,
            rank: participant.final_rank,
     }))
 }
