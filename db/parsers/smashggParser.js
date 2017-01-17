@@ -30,7 +30,7 @@ function getMatches(matches){
 
 function getPlayers(players){
     return players.map(player=>({
-        id: player.id,
+        id: player.entrantId,
         name: player.gamerTag,
     }))
 }
