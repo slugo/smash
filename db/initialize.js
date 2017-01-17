@@ -5,7 +5,7 @@ const tournamentParser = require('./parsers/tournamentParser.js');
 const tournamentList = require('./tournamentList.js');
 
 processedTournaments = tournamentParser(tournamentList)
-						.then(res=>console.log(res.map(t=>t.tourneyInfo)))
+						.then(res=>res.map(t=>t.players)[10])
 						.catch(err=>console.log(err));
 
 /*
