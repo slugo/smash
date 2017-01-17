@@ -44,7 +44,8 @@ function formatInfo(tournament){
 }
 
 function getStandings(tourneyId){
-    const TOURNAMENT_URL=`https://api.smash.gg/tournament/${tourneyId}/event/wii-u-singles/standings`;
+    const page = 1;
+    const TOURNAMENT_URL=`https://api.smash.gg/tournament/${tourneyId}/event/wii-u-singles/standings?${page}`;
     return request(TOURNAMENT_URL,options);
 }
 
