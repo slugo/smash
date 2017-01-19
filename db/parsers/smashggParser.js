@@ -43,10 +43,25 @@ function formatInfo(tournament){
     }));
 }
 
-function getStandings(tourneyId){
-    const page = 1;
-    const TOURNAMENT_URL=`https://api.smash.gg/tournament/${tourneyId}/event/wii-u-singles/standings?${page}`;
-    return request(TOURNAMENT_URL,options);
+function getStandings(tourneyId, info){
+    const maxPage = Math.ceil(info.players.length / 100);
+    const promises = [];
+
+    for(let page = 1 ; page <= maxPage ; page++ ){
+        const TOURNAMENT_URL=`https://api.smash.gg/tournament/${tourneyId}/event/wii-u-singles/standings?per_page=100&page=${page}`;
+        promises.push(request(TOURNAMENT_URL,options));
+    }
+    
+    return Promise.all(promises)
+            .then(res => res.reduce( (prev,curr) => prev.concat(curr.items.entities.standing),[]))
+            .then(res => Object.assign(info,{
+                players: info.players.map(p=>({
+                    id: p.id,
+                    name: p.name,
+                    finalRank: res.filter( rank => rank.entityId == p.id )[0].standing,
+                }))
+            }))
+            .catch(err => console.log(err));
 }
 
 function formatTourneyInfo(tourneyId, info){
@@ -87,7 +102,9 @@ module.exports = (tournamentList) => {
         Promise.all(tournamentList.map(tournamentId=>getBrackets(tournamentId)))
                     .then(res => Promise.all(res.map(brackets=>Promise.all(brackets.map(bracketId=>getBracketMatches(bracketId))))))
                     .then(res => res.map(tournament=>reduceBrackets(tournament)))
-                    .then(res => Promise.all(tournamentList.map((tournamentId,idx)=>formatTourneyInfo(tournamentId,res[idx]))))
+                    .then(res => Promise.all(tournamentList.map((tournamentId,idx) => formatTourneyInfo(tournamentId,res[idx]))))
+                    .then(res => Promise.all(tournamentList.map((tournamentId,idx) => getStandings(tournamentId,res[idx]))))
+                    .then(res => console.log(res[1].players))
                     .then(res => resolve(res))
                     .catch(err => console.log(err));
     });
